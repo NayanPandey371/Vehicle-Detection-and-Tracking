@@ -8,8 +8,8 @@ export default function Navbar() {
 		<div className="text-gray-500 order-3 w-full md:w-auto md:order-2">
 			<ul className="flex font-semibold justify-between">
 				<li className="md:px-4 md:py-2 text-indigo-500"><a href="#">Home</a></li>
-				<li className="md:px-4 md:py-2 text-indigo-500"><a href="#">Detect Vehicle</a></li>
-				<li className="md:px-4 md:py-2 hover:text-indigo-400"><a href="#">Our Team</a></li>
+				<li className="md:px-4 md:py-2 active:text-indigo-500"><a href="#">Detect Vehicle</a></li>
+				<li className="md:px-4 md:py-2 active:text-indigo-400"><a href="#">Our Team</a></li>
 			</ul>
 		</div>
 		<div className="order-2 md:order-3">
