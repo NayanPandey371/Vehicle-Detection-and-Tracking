@@ -22,7 +22,7 @@ export default function Footer() {
                             className="mr-4 text-sm text-gray-500 hover:underline md:mr-6 text-white">Licensing</a>
                     </li>
                     <li>
-                        <a href="team" className="text-sm text-gray-500 hover:underline text-white-0">Contact</a>
+                        <a href="team" className="text-sm text-gray-500 hover:underline text-white">Contact</a>
                     </li>
                 </ul>
             </div>
