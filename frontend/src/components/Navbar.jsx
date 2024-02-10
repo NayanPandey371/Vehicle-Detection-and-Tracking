@@ -10,14 +10,14 @@ export default function Navbar() {
 
   return (
 		<nav className="w-full flex py-1 justify-between items-center px-8">
-			<div className=" flex flex-start jjustify-center items-center ml-28">
+			<div className=" flex flex-start justify-center items-center ml-20">
 				<img src={Logo} height={60} width={60} alt="logo"/>
-				<span className='ml-[12px] font-roboto font-semibold text-2xl'>Urban Pulse</span>
+				<span className='ml-[14px] font-roboto font-semibold text-2xl'>Urban Pulse</span>
 			</div>
-			<div className=" justify-center items-center mr-28">
+			<div className=" justify-center items-center mr-20">
 				<ul className=" flex gap-12 list-none">
 					{navbarItems.map((nav, index) => (
-						<li key={index} className='font-roboto font-semibold cursor-pointer hover:text-purple-400'>
+						<li key={index} className='font-roboto font-semibold cursor-pointer hover:text-primary'>
 						<Link to={nav.path}>{nav.link}</Link>
 						</li>
 					))}
