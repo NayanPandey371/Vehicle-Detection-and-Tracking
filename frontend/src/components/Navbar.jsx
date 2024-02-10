@@ -9,9 +9,10 @@ export default function Navbar() {
 	]
 
   return (
-		<nav className="w-full flex py-6 justify-between items-center px-8">
-			<div className=" flex flex-start ml-28">
+		<nav className="w-full flex py-1 justify-between items-center px-8">
+			<div className=" flex flex-start jjustify-center items-center ml-28">
 				<img src={Logo} height={60} width={60} alt="logo"/>
+				<span className='ml-[12px] font-roboto font-semibold text-2xl'>Urban Pulse</span>
 			</div>
 			<div className=" justify-center items-center mr-28">
 				<ul className=" flex gap-12 list-none">
