@@ -1,12 +1,11 @@
-import hero from '../assets/hero.jpg'
+import banner from '../assets/banner.png'
 
 export default function Landing() {
   return (
     <div className="max-w-screen-2xl mx-20 mt-10">
       <div className='gradientBg rounded-xl rounded-br-[80px]'>
-        <div className="flex flex-row justify-between items-center gap-1">
-
-          <div className='px-4 ml-4 '>
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-1">
+          <div className='px-4 ml-4 mt-4 md:mt-4'>
             <h2 className='text-4xl text-white mb-4'>Vehicle Detection</h2>
             <h2 className='text-4xl text-white mb-4'>and</h2>
             <h2 className='text-4xl text-white mb-4'>Counting</h2>
@@ -16,14 +15,12 @@ export default function Landing() {
                 This web application leverages the power of YOLO (You Only Look Once) to detect and track vehicles,
                 providing you with invaluable insights and security.
               </p>
-            <div className='mt-4'>
-
+            <div className='mt-4 md:mb-8 mb-4'>
               <button className="py-2 px-4 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" >Get Started</button>
             </div>
           </div>
-
-          <div> 
-            <img src={hero} className='rounded-br-[80px]'/>
+          <div className='md:mr-8 '> 
+            <img src={banner}/>
           </div>
         </div>
       </div>
