@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion'
 import banner from '../assets/banner.png'
+import { variants } from '../animations/variants'
 
 export default function Landing() {
   return (
@@ -19,9 +21,13 @@ export default function Landing() {
               <button className="py-2 px-4 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" >Get Started</button>
             </div>
           </div>
-          <div className='md:mr-8 '> 
+          <motion.div 
+          variants={variants}
+          initial="hidden"
+          whileInView="visible"
+          className='md:mr-8 '> 
             <img src={banner}/>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
