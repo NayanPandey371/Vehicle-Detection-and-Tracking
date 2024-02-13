@@ -22,7 +22,7 @@ export default function Landing() {
             </div>
           </div>
           <motion.div 
-          variants={variants}
+          variants={variants("up")}
           initial="hidden"
           whileInView="visible"
           className='md:mr-8 '> 
