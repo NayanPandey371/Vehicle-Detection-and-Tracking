@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import banner from '../assets/banner.png'
 import { variants } from '../animations/variants'
 
@@ -18,7 +19,9 @@ export default function Landing() {
                 providing you with invaluable insights and security.
               </p>
             <div className='mt-4 md:mb-8 mb-4'>
-              <button className="py-2 px-4 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" >Get Started</button>
+              <button className="py-2 px-4 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" >
+                <Link to="/detect">Get Started</Link>
+                </button>
             </div>
           </div>
           <motion.div 

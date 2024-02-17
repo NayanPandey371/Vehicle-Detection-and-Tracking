@@ -1,14 +1,21 @@
 import {useDropzone} from 'react-dropzone';
 
-export default function Basic() {
-  const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
+export default function Basic({ onFilesSelected }) {
+  const {acceptedFiles, getRootProps, open, getInputProps} = useDropzone({
+    noClick: true,
+    onDropAccepted: () => {handleFileChange()}
+  });
   
-  const files = acceptedFiles.map(file => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ));
-
+  // const files = acceptedFiles.map(file => (
+  //   <li key={file.path}>
+  //     {file.path} - {file.size} bytes
+  //   </li>
+  // ));
+  
+  const handleFileChange = () =>{
+    onFilesSelected(acceptedFiles)
+    // console.log(files)
+  }
   return (
     <section>
       <div {...getRootProps({className: 'dropzone'})}>
