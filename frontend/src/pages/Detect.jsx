@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Dropzone from '../components/Dropzone'
+import NewDropzone from '../components/NewDropzone'
 
 export default function Detect() {
 
@@ -7,7 +8,6 @@ export default function Detect() {
 
   const onFilesSelected = (newFiles) => {
     setFiles(newFiles)
-    
   }
   console.log(files)
   return (
@@ -19,8 +19,9 @@ export default function Detect() {
           We support MP4 video format.
         </p>
       </div>
-      <div className='flex justify-center items-center h-60 w-full border-2 border-dashed my-8 rounded'>
+      <div className='flex flex-col justify-center items-center h-60 w-full border-2 border-dashed my-8 rounded'>
         <Dropzone onFilesSelected={onFilesSelected}/>
+        {/* <NewDropzone/> */}
       </div>
       <div className="w-full">
         <button className="w-full py-2 px-4 mt-4 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor">Upload</button>
