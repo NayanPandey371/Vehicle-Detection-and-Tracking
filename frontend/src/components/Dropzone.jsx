@@ -1,35 +1,25 @@
 import {useDropzone} from 'react-dropzone';
-import { useMemo } from 'react'
-
-
-const focusedStyle = {
-  borderColor: '#2196f3'
-};
+import { useCallback } from 'react';
 
 export default function Dropzone({onFilesSelected }) {
 
-  const onDrop = (acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0){
-      console.log('Files selected:', acceptedFiles);
+      // console.log('Files selected:', acceptedFiles);
       onFilesSelected(acceptedFiles)
     } 
-  }
-
-  const {getRootProps, getInputProps, open, isFocused,
-} = useDropzone({
+  }, [])
+  const {getRootProps, getInputProps, open, } = useDropzone({
     noClick: true,
-    onDrop
+    onDrop,
+    accept:{
+      'video/mp4': []
+    }
   });
- 
-  const style = useMemo(() => ({
-    ...(isFocused ? focusedStyle : {}),
-  }), [
-    isFocused,
-  ]);
  
   return (
     <section className='h-full'>
-      <div {...getRootProps({className: 'dropzone', style})} className='h-full flex flex-col my-0 justify-center items-center'>
+      <div {...getRootProps({className: 'dropzone'})} className='h-full flex flex-col my-0 justify-center items-center'>
         <input {...getInputProps()} />
         <p className='text-2xl font-semibold'>Drag and drop your video here.</p>
         <div className='flex justify-center items-align'>
