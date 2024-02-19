@@ -1,11 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home'
-import Landing from '../components/Landing';
+import Detect from '../pages/Detect';
 
 const AppRoutes = () => {
   return (
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/detect" element={<Detect/>} />
       </Routes>
   );
 };

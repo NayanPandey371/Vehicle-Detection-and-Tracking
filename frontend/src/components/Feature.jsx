@@ -1,6 +1,9 @@
 import Detection from '../assets/detection.png'
 import Classification from '../assets/classification.png'
 import Piechart from '../assets/pie_chart.png'
+import { variants } from '../animations/variants'
+import { motion } from 'framer-motion'
+
 
 export default function Feature() {
   return (
@@ -10,9 +13,13 @@ export default function Feature() {
         </div>
         {/* Detection  */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-1 ml-4">
-            <div className='w-1/2 px-4'>
+            <motion.div
+            variants={variants("left")}
+            initial="hidden"
+            whileInView="visible"
+             className='w-1/2 px-4'>
                 <img src={Detection} alt="Detection image" />
-            </div>
+            </motion.div>
 
             <div className='w-full px-4 md:w-2/5'>
                 <h2 className='text-semibold text-2xl md:text-3xl text-primary mb-4'>Detection and Counting</h2>
@@ -28,15 +35,22 @@ export default function Feature() {
                     Beyond simple detection, our app goes further by classifying each vehicle into six distinct categories: Car, Truck, 2-Wheeler, Bus, MiniBus and Tempo.</p>
             </div>
 
-            <div className='w-1/2 px-4'>
+            <motion.div 
+            variants={variants("right")}
+            initial="hidden"
+            whileInView="visible"className='w-1/2 px-4'>
                 <img src={Classification} alt="Classification image" />
-            </div>
+            </motion.div>
         </div>
         {/* analytics */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-1 ml-4">
-            <div className='w-1/2 px-4'>
+            <motion.div
+            variants={variants("left")}
+            initial="hidden"
+            whileInView="visible"
+             className='w-1/2 px-4'>
                 <img src={Piechart} alt="Pie Chart image" />
-            </div>
+            </motion.div>
 
             <div className='w-full px-4 md:w-2/5'>
                 <h2 className='text-semibold text-2xl md:text-3xl text-primary mb-4'>Informative Analytics </h2>
