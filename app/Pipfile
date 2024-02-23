@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = "*"
+fastapi-cors = "*"
+python-multipart = "*"
 
 [dev-packages]
 
