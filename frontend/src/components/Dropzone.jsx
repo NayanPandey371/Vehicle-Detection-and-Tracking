@@ -7,7 +7,8 @@ export default function Dropzone({ onFileSelected }) {
       // console.log('Files selected:', acceptedFiles);
       onFileSelected(acceptedFiles)
     } 
-  }, [])
+  },[])
+  
   const {getRootProps, getInputProps, open, } = useDropzone({
     noClick: true,
     onDrop,

@@ -5,7 +5,6 @@ import ErrorMessage from '../components/ErrorMessage'
 
 export default function Detect() {
 
-  const fileEmptyErrorMessage = "Please select a video file."
   const [file, setFile] = useState([])
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(false)
@@ -44,7 +43,6 @@ export default function Detect() {
       setUploading(false)
     }
   };
-  
   useEffect(() => {
     // Handle dropped files when they change
     if (file.length > 0) {
@@ -59,7 +57,6 @@ export default function Detect() {
     };
   }, [file]);
  
-  // console.log(file[0])
   return (
     <div className="w-full flex justify-center items-center">
       <div className="w-96 flex flex-col justify-center items-center ">
@@ -69,14 +66,19 @@ export default function Detect() {
           We support MP4 video format.
         </p>
       </div>
-      <div className='flex flex-col justify-center items-center h-60 w-full border-2 border-dashed my-8 rounded'>
+      <div className='flex flex-col justify-center items-center h-60 w-full border-2 border-dashed mt-8 mb-4 rounded'>
         <Dropzone onFileSelected={onFileSelected}/>
       </div>
+      { file.length>0 && (
+        <div className='w-full py-2 px-2 bg-gray-100 rounded-xl'>
+          {file[0].name}
+        </div>
+      )}
       <div className="w-full">
         <button className="w-full py-2 px-4 mt-2 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" onClick={handleVideoSubmit}>
           {uploading? 'Uploading...': 'Upload'}</button>
       </div>
-      { error && <ErrorMessage errorMessage={fileEmptyErrorMessage}/>}
+      { error && <ErrorMessage errorMessage="Please select a video file."/>}
       {/* {videos.map((videoUrl, index) => (
       <video key={index} src={videoUrl} controls />
       ))} */}
