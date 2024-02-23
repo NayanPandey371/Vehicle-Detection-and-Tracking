@@ -1,11 +1,11 @@
 import {useDropzone} from 'react-dropzone';
 import { useCallback } from 'react';
 
-export default function Dropzone({onFilesSelected }) {
+export default function Dropzone({ onFileSelected }) {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0){
       // console.log('Files selected:', acceptedFiles);
-      onFilesSelected(acceptedFiles)
+      onFileSelected(acceptedFiles)
     } 
   }, [])
   const {getRootProps, getInputProps, open, } = useDropzone({
