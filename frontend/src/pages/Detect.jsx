@@ -9,6 +9,7 @@ export default function Detect() {
   const [file, setFile] = useState([])
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(false)
+  const [uploading, setUploading] = useState(false);
 
   const onFileSelected = (newFiles) => {
     setFile(newFiles)
@@ -27,6 +28,7 @@ export default function Detect() {
     formData.append('video', file[0]);
 
     try {
+      setUploading(true)
       const response = await axios.post('http://127.0.0.1:8000/upload-video', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -38,6 +40,8 @@ export default function Detect() {
     } catch (error) {
       console.error('Error uploading video:', error);
       // Handle upload errors (e.g., display error message)
+    }finally{
+      setUploading(false)
     }
   };
   
@@ -69,7 +73,8 @@ export default function Detect() {
         <Dropzone onFileSelected={onFileSelected}/>
       </div>
       <div className="w-full">
-        <button className="w-full py-2 px-4 mt-4 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" onClick={handleVideoSubmit}>Upload</button>
+        <button className="w-full py-2 px-4 mt-2 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" onClick={handleVideoSubmit}>
+          {uploading? 'Uploading...': 'Upload'}</button>
       </div>
       { error && <ErrorMessage errorMessage={fileEmptyErrorMessage}/>}
       {/* {videos.map((videoUrl, index) => (
