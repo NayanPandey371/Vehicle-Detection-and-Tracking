@@ -14,7 +14,7 @@ print(torch.__version__)
 
 model_path = './model/best.pt'
 model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
-print(model)
+# print(model)
 # print(model)
 # Add the CORSMiddleware to the app
 app.add_middleware(
@@ -28,8 +28,6 @@ app.add_middleware(
 @app.get('/')
 def sayhello():
     return{"Hello"}
-
-
 
 @app.post("/upload-video")
 async def upload_video(video: UploadFile = File(...)):

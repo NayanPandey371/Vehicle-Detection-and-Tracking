@@ -11,6 +11,8 @@ python-multipart = "*"
 numpy = "*"
 pytorch = "*"
 ultralytics = "*"
+filterpy = "*"
+scikit-image = "*"
 
 [dev-packages]
 
