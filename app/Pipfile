@@ -8,6 +8,9 @@ fastapi = "*"
 uvicorn = "*"
 fastapi-cors = "*"
 python-multipart = "*"
+numpy = "*"
+pytorch = "*"
+ultralytics = "*"
 
 [dev-packages]
 
