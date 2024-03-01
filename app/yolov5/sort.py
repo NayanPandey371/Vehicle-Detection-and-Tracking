@@ -14,7 +14,7 @@ def iou_batch(bb_test, bb_gt):
   """
   bb_gt = np.expand_dims(bb_gt, 0)
   bb_test = np.expand_dims(bb_test, 1)
-
+  
   xx1 = np.maximum(bb_test[..., 0], bb_gt[..., 0])
   yy1 = np.maximum(bb_test[..., 1], bb_gt[..., 1])
   xx2 = np.minimum(bb_test[..., 2], bb_gt[..., 2])
@@ -22,9 +22,9 @@ def iou_batch(bb_test, bb_gt):
   w = np.maximum(0., xx2 - xx1)
   h = np.maximum(0., yy2 - yy1)
   wh = w * h
-  o = wh / ((bb_test[..., 2] - bb_test[..., 0]) * (bb_test[..., 3] - bb_test[..., 1])
-    + (bb_gt[..., 2] - bb_gt[..., 0]) * (bb_gt[..., 3] - bb_gt[..., 1]) - wh)
-  return(o)
+  o = wh / ((bb_test[..., 2] - bb_test[..., 0]) * (bb_test[..., 3] - bb_test[..., 1])                                      
+    + (bb_gt[..., 2] - bb_gt[..., 0]) * (bb_gt[..., 3] - bb_gt[..., 1]) - wh)                                              
+  return(o)  
 
 
 def convert_bbox_to_z(bbox):
@@ -65,7 +65,7 @@ class KalmanBoxTracker(object):
     Initialises a tracker using initial bounding box.
     """
     #define constant velocity model
-    self.kf = KalmanFilter(dim_x=7, dim_z=4)
+    self.kf = KalmanFilter(dim_x=7, dim_z=4) 
     self.kf.F = np.array([[1,0,0,0,1,0,0],[0,1,0,0,0,1,0],[0,0,1,0,0,0,1],[0,0,0,1,0,0,0],  [0,0,0,0,1,0,0],[0,0,0,0,0,1,0],[0,0,0,0,0,0,1]])
     self.kf.H = np.array([[1,0,0,0,0,0,0],[0,1,0,0,0,0,0],[0,0,1,0,0,0,0],[0,0,0,1,0,0,0]])
 
@@ -83,6 +83,7 @@ class KalmanBoxTracker(object):
     self.hits = 0
     self.hit_streak = 0
     self.age = 0
+    self.class_id = bbox[-1]
 
   def update(self,bbox):
     """
@@ -156,7 +157,7 @@ def associate_detections_to_trackers(detections,trackers,iou_threshold = 0.3):
     matches = np.empty((0,2),dtype=int)
   else:
     matches = np.concatenate(matches,axis=0)
-
+    
   return matches, np.array(unmatched_detections), np.array(unmatched_trackers)
 
 
@@ -198,16 +199,17 @@ class Sort(object):
     # update matched trackers with assigned detections
     for m in matched:
       self.trackers[m[1]].update(dets[m[0], :])
-
+      
     # create and initialise new trackers for unmatched detections
     for i in unmatched_dets:
         trk = KalmanBoxTracker(dets[i,:])
+        trk.class_id = dets[i,-1]
         self.trackers.append(trk)
     i = len(self.trackers)
     for trk in reversed(self.trackers):
         d = trk.get_state()[0]
         if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
-          ret.append(np.concatenate((d,[trk.id+1])).reshape(1,-1)) # +1 as MOT benchmark requires positive
+          ret.append(np.concatenate((d,[trk.id+1],[trk.class_id])).reshape(1,-1)) # +1 as MOT benchmark requires positive
         i -= 1
         # remove dead tracklet
         if(trk.time_since_update > self.max_age):
