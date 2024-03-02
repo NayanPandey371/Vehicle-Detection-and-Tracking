@@ -13,6 +13,7 @@ pytorch = "*"
 ultralytics = "*"
 filterpy = "*"
 scikit-image = "*"
+ipython = "*"
 
 [dev-packages]
 

@@ -95,9 +95,14 @@ def mouse_callback(event, x, y, flags, param):
 north_count = []
 south_count = []
 
+video = None
+def get_video(video_path):
+    global video 
+    video = cv2.VideoCapture(video_path)
+    
 # video path
-video_path = 'Vehicle-Detection-and-Counting-6/balkumari.mp4'
-video = cv2.VideoCapture(video_path)
+# video_path = 'Vehicle-Detection-and-Counting-6/balkumari.mp4'
+# video = cv2.VideoCapture(video_path)
 
 if not video.isOpened():
     print("Error: Unable to open video file.")
