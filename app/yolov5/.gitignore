@@ -24,7 +24,11 @@
 !cfg/yolov3*.cfg
 
 storage.googleapis.com
+runs/*
 data/*
+uploads
+output/*
+
 data/images/*
 !data/*.yaml
 !data/hyps
@@ -33,7 +37,7 @@ data/images/*
 !data/images/zidane.jpg
 !data/images/bus.jpg
 !data/*.sh
-
+models/best.pt
 results*.csv
 
 # Datasets -------------------------------------------------------------------------------------------------------------
