@@ -258,7 +258,6 @@ def main(opt):
 def run_model():
     opt = parse_opt()
     main(opt)
-    return 
 
 # if __name__ == "__main__":
 #     opt = parse_opt()
