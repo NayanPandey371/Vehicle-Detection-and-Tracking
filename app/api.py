@@ -1,22 +1,20 @@
 from fastapi import FastAPI, UploadFile, File
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 import torch
 import os
 from yolov5.detect import run_model
 from yolov5.new import video_processing
 import shutil
+import ffmpeg
+import subprocess
 
 # Create a list of allowed origins
 origins = ["http://localhost:5173"]
 
 app = FastAPI()
-# print(torch.__version__)
 
-# model_path = './model/best.pt'
-# model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
-# # print(model)
-# print(model)
 # Add the CORSMiddleware to the app
 app.add_middleware(
     CORSMiddleware,
@@ -26,13 +24,11 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all request headers
 )
 
-@app.get('/')
-def sayhello():
-    return{"Hello"}
 
 RELATIVE_UPLOAD_DIR = './yolov5/uploads'
 RELATIVE_DETECT_DIR = './yolov5/runs/detect'
 CURRENT_DIRECTORY = os.getcwd()
+
 @app.post("/upload-video")
 async def upload_video(video: UploadFile = File(...)):
     try:
@@ -70,12 +66,12 @@ async def upload_video(video: UploadFile = File(...)):
 async def generate_result():
     # video path
     VIDEO_RELATIVE_PATH = './yolov5/uploads'
-    OUTPUT_RELATIVE_PATH = './yolov5/output'
+    OUTPUT_RELATIVE_PATH = '../output'
     VIDEO_PATH = os.path.join(CURRENT_DIRECTORY, VIDEO_RELATIVE_PATH)
-    # OUTPUT_PATH = os.path.join(CURRENT_DIRECTORY, OUTPUT_RELATIVE_PATH)
+    OUTPUT_PATH = os.path.join(CURRENT_DIRECTORY, OUTPUT_RELATIVE_PATH)
     try:
         video_processing(VIDEO_PATH, OUTPUT_RELATIVE_PATH)
-        return  {"message": "Result generated successfully!"}
+        return { "message:" "Video generated successfully."}
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}"}
 

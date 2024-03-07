@@ -27,8 +27,7 @@ storage.googleapis.com
 runs/*
 data/*
 uploads
-output/*
-
+output
 data/images/*
 !data/*.yaml
 !data/hyps
