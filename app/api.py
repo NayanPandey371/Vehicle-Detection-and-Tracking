@@ -2,11 +2,14 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 import torch
 import os
 from yolov5.detect import run_model
 from yolov5.new import video_processing
 import shutil
+import ffmpeg
+import subprocess
 
 # Create a list of allowed origins
 origins = ["http://localhost:5173"]
@@ -22,9 +25,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all request headers
 )
 
-@app.get('/')
-def sayhello():
-    return{"Hello"}
 
 RELATIVE_UPLOAD_DIR = './yolov5/uploads'
 RELATIVE_DETECT_DIR = './yolov5/runs/detect'
@@ -65,7 +65,9 @@ async def upload_video(video: UploadFile = File(...)):
 async def generate_result():
     # video path
     VIDEO_RELATIVE_PATH = './yolov5/uploads'
+
     OUTPUT_RELATIVE_PATH = '../frontend/public/videos'
+
     VIDEO_PATH = os.path.join(CURRENT_DIRECTORY, VIDEO_RELATIVE_PATH)
     OUTPUT_PATH = os.path.join(CURRENT_DIRECTORY, OUTPUT_RELATIVE_PATH)
     try:

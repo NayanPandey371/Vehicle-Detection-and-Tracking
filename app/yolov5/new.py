@@ -21,7 +21,7 @@ TARGET = np.array(
 
 def finder(track_id, tracker):
     for trk, track in enumerate(tracker):
-        if track[-1] == track_id:
+        if track[-2] == track_id:
             return trk
     return -1
 
@@ -155,8 +155,10 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
 
     font = cv2.FONT_HERSHEY_SIMPLEX
 
-    #line_pos = int(height/2) - 200
-    line_pos = SOURCE[3][1]
+    #Max y value for north moving vehicles
+    #Min y value for south moving vehicles
+    north_pos = max([SOURCE[i][1] for i in range(0, 4)])
+    south_pos = min([SOURCE[i][1] for i in range(0, 4)])
     # print(line_pos)
 
     video_out = cv2.VideoWriter(f'{OUTPUT_PATH}/out.mp4', cv2.VideoWriter_fourcc(*'avc1'), video.get(cv2.CAP_PROP_FPS), (width, height))
@@ -232,19 +234,19 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
                     direction[track_id] = None
                 elif direction.get(track_id) is None:
                     i = finder(track_id, prev_track)
-                    if i != - 1 and prev_track[i][1] - track[1] > 2:
+                    if i != - 1 and prev_track[i][1] - track[1] > 1:
                         direction[track_id] = "North"
-                    else:
+                    elif i != -1 and track[1] - prev_track[i][1] > 1:
                         direction[track_id] = "South" 
 
         #cv2.line(frame, (0, line_pos), (width, line_pos), (0, 0, 255), 2)
         for track in tracker:
-            track_id = track[-2]
-            class_id = int(track[-1])
-            if track[1] < line_pos and track_id not in north and direction[track_id] == "North":
+            track_id, class_id = track[-2], int(track[-1])
+            vehicle_pos = (track[1] + track[3]) / 2
+            if vehicle_pos < north_pos and track_id not in north and direction[track_id] == "North":
                 north_count[class_id] +=1
                 north.append(track_id)
-            elif track[1] > line_pos and track_id not in south and direction[track_id] == "South":
+            elif vehicle_pos > south_pos and track_id not in south and direction[track_id] == "South":
                 south_count[class_id] += 1
                 south.append(track_id)
             

@@ -14,6 +14,7 @@ ultralytics = "*"
 filterpy = "*"
 scikit-image = "*"
 ipython = "*"
+ffmpeg = "*"
 
 [dev-packages]
 
