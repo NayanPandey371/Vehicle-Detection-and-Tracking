@@ -66,27 +66,12 @@ async def upload_video(video: UploadFile = File(...)):
 async def generate_result():
     # video path
     VIDEO_RELATIVE_PATH = './yolov5/uploads'
-    OUTPUT_RELATIVE_PATH = './yolov5/output'
+    OUTPUT_RELATIVE_PATH = '../output'
     VIDEO_PATH = os.path.join(CURRENT_DIRECTORY, VIDEO_RELATIVE_PATH)
     OUTPUT_PATH = os.path.join(CURRENT_DIRECTORY, OUTPUT_RELATIVE_PATH)
     try:
-        # video_processing(VIDEO_PATH, OUTPUT_RELATIVE_PATH)
-
-        video_path = f'{OUTPUT_PATH}/out.mp4'
-
-        command = f"ffmpeg -i {video_path} -c:v libx264 -crf 28 {video_path}"
-
-         # Execute ffmpeg command using subprocess
-        subprocess.run(command.split())
-        
-
-        return  StreamingResponse(
-            video,
-            media_type='video/mp4',
-            headers={
-                "Content-Disposition": "inline; filename=out.mp4"
-            }
-        )
+        video_processing(VIDEO_PATH, OUTPUT_RELATIVE_PATH)
+        return { "message:" "Video generated successfully."}
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}"}
 
