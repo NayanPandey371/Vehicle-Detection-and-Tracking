@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
 		<nav className="w-full flex flex-col md:flex-row py-1 justify-between items-center px-8">
 			<div className=" flex md:flex-start justify-center items-center md:ml-20 ml-0">
-				<img src={Logo} height={60} width={60} alt="logo"/>
+				<Link to="/"><img src={Logo} height={60} width={60} alt="logo"/></Link>
 				<span className='ml-[14px] font-roboto font-semibold text-2xl'>Urban Pulse</span>
 			</div>
 			<div className=" justify-between md:justify-center items-center mt-8 md:mt-0 md:mr-20">
