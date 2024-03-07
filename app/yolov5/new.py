@@ -179,6 +179,8 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
     track_id_array = []
     prev_position = {}
 
+    speed_averages = {}
+    speed_window_size = 5
 
     video_file_name_without_extension = os.path.splitext(video_file_name)[0]
     print(video_file_name_without_extension)
@@ -266,7 +268,16 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
                 distance = math.sqrt((abs(x2 - x1) ** 2) + (abs(y2 - y1) ** 2))
                 speed = 3.6 * distance / time
 
-                frame = cv2.putText(frame, f'Speed: {speed:.2f} km/hr', (int(track[0]), int(track[1])), font, 1, colors[class_id], 1)
+                if present_track_id in speed_averages:
+                    if len(speed_averages[present_track_id]) >= speed_window_size:
+                        speed_averages[present_track_id].pop(0)
+                    speed_averages[present_track_id].append(speed)
+                else:
+                    speed_averages[present_track_id] = [speed]
+
+                average_speed = sum(speed_averages[present_track_id]) / len(speed_averages[present_track_id])
+
+                frame = cv2.putText(frame, f'Speed: {average_speed:.2f} km/hr', (int(track[0]), int(track[1])), font, 1, colors[class_id], 2)
                 frame = cv2.putText(frame, classes[class_id], (int(track[0]), int(track[1] - 20)), font, 1, colors[class_id], 1)
 
             prev_frame_numbers[present_track_id] = video.get(cv2.CAP_PROP_POS_FRAMES)
