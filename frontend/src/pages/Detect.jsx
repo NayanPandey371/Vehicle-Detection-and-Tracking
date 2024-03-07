@@ -43,6 +43,7 @@ export default function Detect() {
       setUploading(false)
     }
   };
+  
   useEffect(() => {
     // Handle dropped files when they change
     if (file.length > 0) {
