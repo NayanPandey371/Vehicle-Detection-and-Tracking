@@ -161,7 +161,7 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
     south_pos = min([SOURCE[i][1] for i in range(0, 4)])
     # print(line_pos)
 
-    video_out = cv2.VideoWriter(f'{OUTPUT_PATH}/out.mp4', cv2.VideoWriter_fourcc(*'mp4v'), video.get(cv2.CAP_PROP_FPS), (width, height))
+    video_out = cv2.VideoWriter(f'{OUTPUT_PATH}/out.mp4', cv2.VideoWriter_fourcc(*'avc1'), video.get(cv2.CAP_PROP_FPS), (width, height))
 
     # Check if the video writer is initialized successfully
     if not video_out.isOpened():

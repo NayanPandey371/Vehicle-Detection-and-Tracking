@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import FileResponse
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -54,27 +55,39 @@ async def upload_video(video: UploadFile = File(...)):
         with open(f"{UPLOAD_DIR}/{video.filename}", "wb") as f:
             f.write(video.file.read())
         run_model()
-        
         return {"message": "Video uploaded successfully!"}
 
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}"}
 
 
-
 @app.get("/get-result")
 async def generate_result():
     # video path
     VIDEO_RELATIVE_PATH = './yolov5/uploads'
-    OUTPUT_RELATIVE_PATH = '../output'
+
+    OUTPUT_RELATIVE_PATH = '../frontend/public/videos'
+
     VIDEO_PATH = os.path.join(CURRENT_DIRECTORY, VIDEO_RELATIVE_PATH)
     OUTPUT_PATH = os.path.join(CURRENT_DIRECTORY, OUTPUT_RELATIVE_PATH)
     try:
         video_processing(VIDEO_PATH, OUTPUT_RELATIVE_PATH)
-        return { "message:" "Video generated successfully."}
+
+        for file in os.listdir(OUTPUT_PATH):
+            if(file == 'out.mp4'):
+                VIDEO_FILE_PATH = os.path.join(OUTPUT_PATH, file)
+
+        return VIDEO_FILE_PATH
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}"}
+
+# def compress_video(input_path):
+#     absolute_path = os.path.abspath('./yolov5/output/out.mp4')
+#     original_video = VideoFileClip(absolute_path)
+#     compressed_video = './yolov5/output/compressed.mp4'
+#     original_video.write_videofile(compressed_video, codec="libx264", bitrate="5000k")
 
 # Run the FastAPI server
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000, timeout_keep_alive=1200)
+    # generate_result()
