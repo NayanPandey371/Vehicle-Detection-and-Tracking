@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "23928a8ccd8e7e3e8d9c38d66718443cf74b0cb88a09290d0b0c4be433a3d537"
+            "sha256": "b3273ad0e62ecbd9693cb27803e69584d1194e3392b9fff897d8cf24ac02c73a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -227,11 +227,11 @@
         },
         "environs": {
             "hashes": [
-                "sha256:cc421ddb143fa30183568164755aa113a160e555cd19e97e664c478662032c24",
-                "sha256:feeaf28f17fd0499f9cd7c0fcf408c6d82c308e69e335eb92d09322fc9ed8138"
+                "sha256:069727a8f73d8ba8d033d3cd95c0da231d44f38f1da773bf076cef168d312ee8",
+                "sha256:e0bcfd41c718c07a7db422f9109e490746450da38793fe4ee197f397b9343435"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==10.3.0"
+            "version": "==11.0.0"
         },
         "executing": {
             "hashes": [
@@ -256,6 +256,13 @@
             ],
             "index": "pypi",
             "version": "==0.0.6"
+        },
+        "ffmpeg": {
+            "hashes": [
+                "sha256:6931692c890ff21d39938433c2189747815dca0c60ddc7f9bb97f199dba0b5b9"
+            ],
+            "index": "pypi",
+            "version": "==1.4"
         },
         "filelock": {
             "hashes": [
@@ -354,11 +361,11 @@
         },
         "ipython": {
             "hashes": [
-                "sha256:39c6f9efc079fb19bfb0f17eee903978fe9a290b1b82d68196c641cecb76ea22",
-                "sha256:869335e8cded62ffb6fac8928e5287a05433d6462e3ebaac25f4216474dd6bc4"
+                "sha256:2dcaad9049f9056f1fef63514f176c7d41f930daa78d05b82a176202818f2c14",
+                "sha256:3c86f284c8f3d8f2b6c662f885c4889a91df7cd52056fd02b7d8d6195d7f56e9"
             ],
             "index": "pypi",
-            "version": "==8.22.1"
+            "version": "==8.22.2"
         },
         "jedi": {
             "hashes": [
@@ -562,11 +569,11 @@
         },
         "marshmallow": {
             "hashes": [
-                "sha256:20f53be28c6e374a711a16165fb22a8dc6003e3f7cda1285e3ca777b9193885b",
-                "sha256:e7997f83571c7fd476042c2c188e4ee8a78900ca5e74bd9c8097afa56624e9bd"
+                "sha256:4e65e9e0d80fc9e609574b9983cf32579f305c718afb30d7233ab818571768c3",
+                "sha256:f085493f79efb0644f270a9bf2892843142d80d7174bbbd2f3713f2a589dc633"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==3.21.0"
+            "version": "==3.21.1"
         },
         "matplotlib": {
             "hashes": [
@@ -952,11 +959,11 @@
         },
         "pyparsing": {
             "hashes": [
-                "sha256:32c7c0b711493c72ff18a981d24f28aaf9c1fb7ed5e9667c9e84e3db623bdbfb",
-                "sha256:ede28a1a32462f5a9705e07aea48001a08f7cf81a021585011deba701581a0db"
+                "sha256:a1bac0ce561155ecc3ed78ca94d3c9378656ad4c94c1270de543f621420f94ad",
+                "sha256:f9db75911801ed778fe61bb643079ff86601aca99fcae6345aa67292038fb742"
             ],
             "markers": "python_full_version >= '3.6.8'",
-            "version": "==3.1.1"
+            "version": "==3.1.2"
         },
         "python-dateutil": {
             "hashes": [
@@ -1276,11 +1283,11 @@
         },
         "ultralytics": {
             "hashes": [
-                "sha256:bc62ef59502fd4941cb721ddd2e7084f043df73329dab18b643a14584ea26443",
-                "sha256:da294654c342f689ac0f01dab5f9d97474f9645745f6007f5fbe13556e3889e9"
+                "sha256:15071ce158a16bb11a393da9548f18ad45b960ac06383a52d22bd74b093c1a77",
+                "sha256:e22729a3e0338362e6e90969f1f77433bd8aedc5c3af2b6a682eb788605a7118"
             ],
             "index": "pypi",
-            "version": "==8.1.20"
+            "version": "==8.1.24"
         },
         "urllib3": {
             "hashes": [
