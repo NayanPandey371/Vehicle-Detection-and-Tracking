@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Dropzone from '../components/Dropzone'
 import axios from 'axios'
 import ErrorMessage from '../components/ErrorMessage'
+import { useNavigate } from 'react-router-dom'
 
 export default function Detect() {
 
   const [file, setFile] = useState([])
-  const [videos, setVideos] = useState([]);
+  // const [videos, setVideos] = useState([]);
   const [error, setError] = useState(false)
   const [uploading, setUploading] = useState(false);
+  const navigate = useNavigate()
 
   const onFileSelected = (newFiles) => {
     setFile(newFiles)
@@ -34,6 +36,8 @@ export default function Detect() {
         },
       });
       console.log('Video uploaded successfully:', response.data);
+      navigate('/get-result')
+
       
       // Handle successful upload (e.g., clear form, display success message)
     } catch (error) {
@@ -44,19 +48,19 @@ export default function Detect() {
     }
   };
   
-  useEffect(() => {
-    // Handle dropped files when they change
-    if (file.length > 0) {
-      const newVideos = file.map((file) =>
-        URL.createObjectURL(file) // Create temporary URL for video preview
-      );
-      setVideos(newVideos);
-    }
-    // Revoke previously created URLs when unmounted
-    return () => {
-      videos.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [file]);
+  // useEffect(() => {
+  //   // Handle dropped files when they change
+  //   if (file.length > 0) {
+  //     const newVideos = file.map((file) =>
+  //       URL.createObjectURL(file) // Create temporary URL for video preview
+  //     );
+  //     setVideos(newVideos);
+  //   }
+  //   // Revoke previously created URLs when unmounted
+  //   return () => {
+  //     videos.forEach((url) => URL.revokeObjectURL(url));
+  //   };
+  // }, [file]);
  
   return (
     <div className="w-full flex justify-center items-center">
