@@ -1,15 +1,12 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import FileResponse
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse
 import torch
 import os
 from yolov5.detect import run_model
 from yolov5.new import video_processing
 import shutil
-import ffmpeg
-import subprocess
 
 # Create a list of allowed origins
 origins = ["http://localhost:5173"]
@@ -35,6 +32,9 @@ async def upload_video(video: UploadFile = File(...)):
     try:
         UPLOAD_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_UPLOAD_DIR)
         DETECT_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_DETECT_DIR)
+
+        #create uploads folders if it is not already present
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
         # Get all files in the directory
         files = os.listdir(UPLOAD_DIR)
         # Iterate through each file and remove it
@@ -44,8 +44,6 @@ async def upload_video(video: UploadFile = File(...)):
             # Check if it's a file (not a directory) before removing
             if os.path.isfile(file_path):
                 os.remove(file_path)
-
-        os.makedirs(UPLOAD_DIR, exist_ok=True)
 
         # remove the detect folder if it exists
         if os.path.exists(DETECT_DIR):
@@ -71,13 +69,18 @@ async def generate_result():
     VIDEO_PATH = os.path.join(CURRENT_DIRECTORY, VIDEO_RELATIVE_PATH)
     OUTPUT_PATH = os.path.join(CURRENT_DIRECTORY, OUTPUT_RELATIVE_PATH)
     try:
-        video_processing(VIDEO_PATH, OUTPUT_RELATIVE_PATH)
+        north_count, south_count = video_processing(VIDEO_PATH, OUTPUT_RELATIVE_PATH)
 
         for file in os.listdir(OUTPUT_PATH):
             if(file == 'out.mp4'):
                 VIDEO_FILE_PATH = os.path.join(OUTPUT_PATH, file)
 
-        return VIDEO_FILE_PATH
+        data = {
+            "file_path": VIDEO_FILE_PATH,
+            "north_count": north_count,
+            "south_count": south_count
+        }
+        return JSONResponse(data)
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}"}
 
@@ -90,4 +93,3 @@ async def generate_result():
 # Run the FastAPI server
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000, timeout_keep_alive=1200)
-    # generate_result()

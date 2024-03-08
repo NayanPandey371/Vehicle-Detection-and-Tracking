@@ -297,8 +297,9 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
         detections = np.zeros(shape=(40, 6))
         prev_track = tracker
         label.close()
-
+    
     video.release()
     video_out.release()
     cv2.destroyAllWindows()
+    return north_count, south_count
 
