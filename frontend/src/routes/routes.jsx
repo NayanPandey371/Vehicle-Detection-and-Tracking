@@ -9,6 +9,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/detect" element={<Detect/>} />
         <Route path="/get-result" element={<Result/>}/>
+        {/* <Route path="/realtime-result" element={}/> */}
       </Routes>
   );
 };

@@ -3,5 +3,5 @@
 }
 
 .chartGradientBg{
-    background: radial-gradient(circle, rgba(215,223,235,1) 90%, rgba(164,200,242,1) 100%);
+    background: radial-gradient(circle, rgb(235, 239, 244) 90%, rgb(186, 210, 238) 100%);
 }

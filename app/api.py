@@ -6,6 +6,7 @@ import torch
 import os
 from yolov5.detect import run_model
 from yolov5.new import video_processing
+from yolov5.realtime import real_time_detection
 import shutil
 
 # Create a list of allowed origins
@@ -22,17 +23,15 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all request headers
 )
 
-
 RELATIVE_UPLOAD_DIR = './yolov5/uploads'
 RELATIVE_DETECT_DIR = './yolov5/runs/detect'
 CURRENT_DIRECTORY = os.getcwd()
+UPLOAD_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_UPLOAD_DIR)
+DETECT_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_DETECT_DIR)
 
 @app.post("/upload-video")
 async def upload_video(video: UploadFile = File(...)):
     try:
-        UPLOAD_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_UPLOAD_DIR)
-        DETECT_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_DETECT_DIR)
-
         #create uploads folders if it is not already present
         os.makedirs(UPLOAD_DIR, exist_ok=True)
         files = os.listdir(UPLOAD_DIR)
@@ -57,6 +56,36 @@ async def upload_video(video: UploadFile = File(...)):
     except Exception as e:
         return {"message": f"An error occurred: {str(e)}"}
 
+@app.post("/upload-real-video")
+async def upload_video_for_real_time(video: UploadFile = File(...)):
+    try:
+        VIDEO_RELATIVE_PATH = './yolov5/uploads'
+        VIDEO_PATH = os.path.join(CURRENT_DIRECTORY, VIDEO_RELATIVE_PATH)
+        #create uploads folders if it is not already present
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        # Get all files in the directory
+        files = os.listdir(UPLOAD_DIR)
+        # Iterate through each file and remove it
+        for filename in files:
+            # Construct the full path to the file
+            file_path = os.path.join(UPLOAD_DIR, filename)
+            # Check if it's a file (not a directory) before removing
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+        # remove the detect folder if it exists
+        if os.path.exists(DETECT_DIR):
+            shutil.rmtree(DETECT_DIR)
+
+        # save the video content
+        with open(f"{UPLOAD_DIR}/{video.filename}", "wb") as f:
+            f.write(video.file.read())
+        # run_model()
+        real_time_detection(VIDEO_PATH)
+            
+        return {"message": "Video uploaded successfully!"}
+    except Exception as e:
+        return {"message": f"An error occurred: {str(e)}"}
 
 @app.get("/get-result")
 async def generate_result():
