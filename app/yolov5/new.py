@@ -5,9 +5,9 @@ import os
 import math
 
 
-#for transformation of pixel into distance
-TARGET_WIDTH = 3
-TARGET_HEIGHT = 3
+# For transformation of pixel into distance
+TARGET_WIDTH = 15
+TARGET_HEIGHT = 30
 
 TARGET = np.array(
     [
@@ -67,31 +67,32 @@ class ViewTransformer:
 
         reshaped_points = points.reshape(-1, 1, 2).astype(np.float32)
         transformed_points = cv2.perspectiveTransform(reshaped_points, self.m)
+        transformed_points = self.handle_small_floats(transformed_points)
         return transformed_points.reshape(-1, 2)
+    
+    def handle_small_floats(self, points: np.ndarray) -> np.ndarray:
+        return np.where(np.abs(points) < 1e-15, 0, points)
 
 source_points = []
 clicked_points = []
+
 # Define a mouse callback function to capture four points for the polygon
 def mouse_callback(event, x, y, flags, param):
-    global source_points, clicked_points
+    global clicked_points, source_points
     width, height, desired_width, desired_height, resized_frame = param
-    # print(resized_frame, width, height)
-    if event == cv2.EVENT_MOUSEMOVE:
-        print("Coordinates (x, y):", x, y)
+    # if event == cv2.EVENT_MOUSEMOVE:
+    #     print("Coordinates (x, y):", x, y)
     if event == cv2.EVENT_LBUTTONDOWN:
         if len(clicked_points) < 4:
             clicked_points.append([x, y])
-            cv2.circle(resized_frame, (x, y), 5, (0, 255, 0), -1)  # Draw a dot at the clicked point
+            cv2.circle(resized_frame, (x, y), 2, (238,169,144), -1)  # Draw a dot at the clicked point
 
-            # print("from mouse", clicked_points)
             if len(clicked_points) > 1:  # Draw a line between points for every other click
-                cv2.line(resized_frame, tuple(clicked_points[-2]), tuple(clicked_points[-1]), (0, 0, 255), 2)
-                # print("line should be here")
+                cv2.line(resized_frame, tuple(clicked_points[-2]), tuple(clicked_points[-1]), (238,169,144), 2)
 
             if len(clicked_points) == 4:  # If four points are clicked, update source_points
-                cv2.line(resized_frame, tuple(clicked_points[0]), tuple(clicked_points[3]), (0, 0, 255), 2)
+                cv2.line(resized_frame, tuple(clicked_points[0]), tuple(clicked_points[3]), (238,169,144), 2)
                 source_points = np.array(clicked_points)
-                print(source_points[3][1])
 
                 source_points[:, 0] = source_points[:, 0] * width / desired_width
                 source_points[:, 1] = source_points[:, 1] * height / desired_height
@@ -105,7 +106,6 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
         north_count[i] = 0
         south_count[i] = 0
 
-    
     video_files = os.listdir(VIDEO_PATH)
 
     for video_file in video_files:
@@ -134,11 +134,9 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
     # Resize the frame
     resized_frame = cv2.resize(frame, (desired_width, desired_height))
 
-    global source_points
-    #for mouse callback
+    # For mouse callback
     cv2.namedWindow('Frame')
     cv2.setMouseCallback('Frame', mouse_callback, (width, height, desired_width, desired_height, resized_frame))
-    # print("From video", resized_frame)
     while(1):
         cv2.imshow('Frame', resized_frame)
         key=cv2.waitKey(1)
@@ -177,6 +175,13 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
     detections = np.zeros(shape=(40, 6))
     direction = {}
 
+    prev_frame_numbers = {}
+    track_id_array = []
+    prev_position = {}
+
+    speed_averages = {}
+    speed_window_size = 5
+
     video_file_name_without_extension = os.path.splitext(video_file_name)[0]
     print(video_file_name_without_extension)
     print('Processing. Please Wait')
@@ -207,25 +212,19 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
                     id += 1
                     class_counts[class_id] += 1
                     cv2.rectangle(frame, (int(x_top), int(y_top)), (int(x_low), int(y_low)), colors[class_id], 2)
-                    #   class_counts[class_id] = class_counts.get(class_id, 0) + 1
                     
                 cv2.rectangle(frame, (40, 0), (width-130, 40), (0, 0, 0), -1)
 
-                x_offset = 50  # Initial x-coordinate offset
+                x_offset = 50 
                 for i in range(6):
                     text = f"{classes[i]}: {class_counts[i]}"
                     text_width = cv2.getTextSize(text, font, 1, 2)[0][0]
                     cv2.putText(frame, text, (x_offset, 30), font, 1, (50, 205, 50))
-                    x_offset += text_width + 10  # Increment x-coordinate by text width plus some spacing
+                    x_offset += text_width + 10 
 
                 cv2.polylines(frame, [SOURCE], isClosed=True, color=(0, 255, 0), thickness=2)
 
         tracker = mot_tracker.update(detections[:id])
-
-        # for class_id, count in class_counts.items():
-        #     class_name = vehicle_class(class_id)
-        #     text = f"{class_name}: {count}"
-        #     cv2.putText(frame, text, (20, 20 + 30 * class_id), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
         if count != 0:
             for track in tracker:
@@ -250,21 +249,47 @@ def video_processing(VIDEO_PATH, OUTPUT_PATH):
                 south_count[class_id] += 1
                 south.append(track_id)
             
-            #for speed measurement
-            transformed_point1 = view_transformer.transform_points(points=np.array([track[0], track[1]]))[0].astype(int)
-            transformed_point2 = view_transformer.transform_points(points=np.array([track[2], track[3]]))[0].astype(int)
-            x1, y1 = transformed_point1
-            x2, y2 = transformed_point2
+            # For speed measurement
+            x_centre_of_bounding_box = (track[0] + track[2]) / 2
+            y_centre_of_bounding_box = (track[1] + track[3]) / 2
 
-            distance = math.sqrt((abs(y2 - x2) ** 2) + (abs(y1 - x1) ** 2))
-            time = 1 / fps
-            speed = distance / time
-            frame = cv2.putText(frame, f'Speed: {speed:.2f} km/hr', (int(track[0]), int(track[1])), font, 1, colors[class_id], 1)
-            #frame = cv2.putText(frame, str(int(track_id)), (int(track[0]), int(track[1] - 20)), font, 1, (0,0,255), 2)
+            present_track_id = track_id
+            if present_track_id in track_id_array:
+                current_frame_number = video.get(cv2.CAP_PROP_POS_FRAMES)
+                prev_frame_number = prev_frame_numbers[present_track_id]
+                frame_difference = current_frame_number - prev_frame_number
+                time = frame_difference / fps
+
+                transformed_point1 = view_transformer.transform_points(points=np.array(prev_position[present_track_id]))[0].astype(float)
+                transformed_point2 = view_transformer.transform_points(points=np.array([x_centre_of_bounding_box, y_centre_of_bounding_box]))[0].astype(float)
+                x1, y1 = transformed_point1
+                x2, y2 = transformed_point2
+
+                distance = math.sqrt((abs(x2 - x1) ** 2) + (abs(y2 - y1) ** 2))
+                speed = 3.6 * distance / time
+
+                if present_track_id in speed_averages:
+                    if len(speed_averages[present_track_id]) >= speed_window_size:
+                        speed_averages[present_track_id].pop(0)
+                    speed_averages[present_track_id].append(speed)
+                else:
+                    speed_averages[present_track_id] = [speed]
+
+                average_speed = sum(speed_averages[present_track_id]) / len(speed_averages[present_track_id])
+
+                frame = cv2.putText(frame, f'Speed: {average_speed:.2f} km/hr', (int(track[0]), int(track[1])), font, 1, colors[class_id], 2)
+                frame = cv2.putText(frame, classes[class_id], (int(track[0]), int(track[1] - 20)), font, 1, colors[class_id], 1)
+
+            prev_frame_numbers[present_track_id] = video.get(cv2.CAP_PROP_POS_FRAMES)
+
+            prev_position[present_track_id] = [x_centre_of_bounding_box, y_centre_of_bounding_box]
+        
+            if track_id not in track_id_array:
+                track_id_array.append(track_id)
 
         for i in range(6):
-            frame = cv2.putText(frame, classes[i] +": "+ str(north_count[i]), (100, 50*(i+2)), font, 1, (0, 0, 255), 2)
-            frame = cv2.putText(frame, classes[i] +": "+ str(south_count[i]), (800, 50*(i+2)), font, 1,  (0, 0, 255), 2)
+            frame = cv2.putText(frame, classes[i] +": "+ str(north_count[i]), (100, 50*(i+2)), font, 1, (0, 255, 0), 2)
+            frame = cv2.putText(frame, classes[i] +": "+ str(south_count[i]), (800, 50*(i+2)), font, 1,  (0, 255, 0), 2)
 
         video_out.write(frame)
         success, frame = video.read()
