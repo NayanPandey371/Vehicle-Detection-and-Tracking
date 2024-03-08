@@ -8,8 +8,6 @@ import os
 from yolov5.detect import run_model
 from yolov5.new import video_processing
 import shutil
-import ffmpeg
-import subprocess
 
 # Create a list of allowed origins
 origins = ["http://localhost:5173"]
@@ -36,6 +34,7 @@ async def upload_video(video: UploadFile = File(...)):
         UPLOAD_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_UPLOAD_DIR)
         DETECT_DIR = os.path.join(CURRENT_DIRECTORY, RELATIVE_DETECT_DIR)
         # Get all files in the directory
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
         files = os.listdir(UPLOAD_DIR)
         # Iterate through each file and remove it
         for filename in files:
@@ -44,8 +43,6 @@ async def upload_video(video: UploadFile = File(...)):
             # Check if it's a file (not a directory) before removing
             if os.path.isfile(file_path):
                 os.remove(file_path)
-
-        os.makedirs(UPLOAD_DIR, exist_ok=True)
 
         # remove the detect folder if it exists
         if os.path.exists(DETECT_DIR):
