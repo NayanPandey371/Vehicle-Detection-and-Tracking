@@ -36,11 +36,14 @@ export default function Result() {
                 </div>    
             ):(
             <div className="flex flex-col justify-center align-center">
+                <h2 className="text-4xl font-bold text-center mt-2 mb-10 text-primary">Vehicle Detection and Counting</h2>
                 <div className="flex justify-center align-center">
                     <ReactPlayer url={videoUrl}  controls />
                 </div>
-                <div className="flex justify-center align-center">
+                <div className="flex flex-col justify-center align-center mt-10 mb-10">
+                    <h2 className="text-4xl font-bold text-center mt-2 text-primary ">Vehicle Distribution Chart</h2>
                     <div className="flex flex-row justify-center align-center gap-16 mt-10 ">
+                        
                         <div className="chartGradientBg rounded-3xl p-10">
                             <PieChart data={northCount}/>
                             <h3 className="text-2xl font-bold text-center mt-2 text-black">North</h3>

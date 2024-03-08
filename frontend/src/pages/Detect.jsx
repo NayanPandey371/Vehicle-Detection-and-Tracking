@@ -7,17 +7,18 @@ import { useNavigate } from 'react-router-dom'
 export default function Detect() {
 
   const [file, setFile] = useState([])
-  // const [videos, setVideos] = useState([]);
   const [error, setError] = useState(false)
-  const [uploading, setUploading] = useState(false);
+  const [uploadingFirstButton, setUploadingFirstButton] = useState(false);
+  const [uploadingSecondButton, setUploadingSecondButton] = useState(false);
+
   const navigate = useNavigate()
 
   const onFileSelected = (newFiles) => {
     setFile(newFiles)
   }
 
-  const handleVideoSubmit = async (event) => {
-    event.preventDefault();
+  const handleVideoSubmit = async (event, buttonIndex) => {
+    event.preventDefault()
 
     if (file.length === 0) {
       console.log("Error")
@@ -29,39 +30,35 @@ export default function Detect() {
     formData.append('video', file[0]);
 
     try {
-      setUploading(true)
-      const response = await axios.post('http://127.0.0.1:8000/upload-video', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log('Video uploaded successfully:', response.data);
-      navigate('/get-result')
-
+      if(buttonIndex == 1){
+          setUploadingFirstButton(true)
+          const response = await axios.post('http://127.0.0.1:8000/upload-video', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Video uploaded successfully:', response.data);
+        setUploadingFirstButton(false)
+        navigate('/get-result')
+      }
+      else{
+        setUploadingSecondButton(true)
+        const response = await axios.post('http://127.0.0.1:8000/upload-real-video', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Video uploaded successfully:', response.data);
+        setUploadingSecondButton(true)
+      }
       
       // Handle successful upload (e.g., clear form, display success message)
     } catch (error) {
       console.error('Error uploading video:', error);
       // Handle upload errors (e.g., display error message)
-    }finally{
-      setUploading(false)
     }
-  };
+  }
   
-  // useEffect(() => {
-  //   // Handle dropped files when they change
-  //   if (file.length > 0) {
-  //     const newVideos = file.map((file) =>
-  //       URL.createObjectURL(file) // Create t  URL for video preview
-  //     );
-  //     setVideos(newVideos);
-  //   }
-  //   // Revoke previously created URLs when unmounted
-  //   return () => {
-  //     videos.forEach((url) => URL.revokeObjectURL(url));
-  //   };
-  // }, [file]);
- 
   return (
     <div className="w-full flex justify-center items-center">
       <div className="w-96 flex flex-col justify-center items-center ">
@@ -75,18 +72,19 @@ export default function Detect() {
         <Dropzone onFileSelected={onFileSelected}/>
       </div>
       { file.length>0 && (
-        <div className='w-full py-2 px-2 bg-gray-100 rounded-xl'>
+        <div className='w-full py-2 px-2 bg-blue-100 rounded-xl'>
           {file[0].name}
         </div>
       )}
-      <div className="w-full">
-        <button className="w-full py-2 px-4 mt-2 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" onClick={handleVideoSubmit}>
-          {uploading? 'Uploading...': 'Upload'}</button>
+      <div className=" flex flex-col md:flex-row gap-1 w-full">
+        <button className="w-full py-2 px-4 mt-2 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" onClick={(event) => handleVideoSubmit(event,1)}>
+          {uploadingFirstButton? 'Uploading...': 'Upload'}
+        </button>
+        <button className="w-full py-2 px-4 mt-2 bg-primary text-white rounded cursor-pointer hover:shadow-boxshadowcolor" onClick={(event) => handleVideoSubmit(event,2)}>
+          {uploadingSecondButton? 'Uploading...': 'Upload For Real time'}
+        </button>
       </div>
       { error && <ErrorMessage errorMessage="Please select a video file."/>}
-      {/* {videos.map((videoUrl, index) => (
-      <video key={index} src={videoUrl} controls />
-      ))} */}
       </div>
     </div>
   )

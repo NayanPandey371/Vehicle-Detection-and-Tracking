@@ -5,7 +5,6 @@ export default function Navbar() {
 	const navbarItems =[
 		{link: "Home", path:"/"},
 		{link: "Detect", path:"/detect"},
-		{link: "Our Team", path:"/team"}
 	]
 
   return (
