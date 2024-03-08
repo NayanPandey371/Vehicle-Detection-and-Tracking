@@ -1,14 +1,12 @@
 import Navbar from './components/Navbar'
 import './App.css'
 import AppRoutes from './routes/routes'
-import Footer from './components/Footer'
 
 function App() {
   return (
     <>
      <Navbar/>
      <AppRoutes />
-     <Footer/>
     </>
   )
 }
