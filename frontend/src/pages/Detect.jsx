@@ -52,7 +52,7 @@ export default function Detect() {
   //   // Handle dropped files when they change
   //   if (file.length > 0) {
   //     const newVideos = file.map((file) =>
-  //       URL.createObjectURL(file) // Create temporary URL for video preview
+  //       URL.createObjectURL(file) // Create t  URL for video preview
   //     );
   //     setVideos(newVideos);
   //   }
