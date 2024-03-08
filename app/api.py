@@ -35,8 +35,6 @@ async def upload_video(video: UploadFile = File(...)):
 
         #create uploads folders if it is not already present
         os.makedirs(UPLOAD_DIR, exist_ok=True)
-        # Get all files in the directory
-        os.makedirs(UPLOAD_DIR, exist_ok=True)
         files = os.listdir(UPLOAD_DIR)
         # Iterate through each file and remove it
         for filename in files:
