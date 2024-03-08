@@ -1,3 +1,7 @@
 .gradientBg{
     background: linear-gradient(316deg, #310e68 0%, #5f0f40 74%);
 }
+
+.chartGradientBg{
+    background: radial-gradient(circle, rgba(215,223,235,1) 90%, rgba(164,200,242,1) 100%);
+}
