@@ -25,12 +25,12 @@ class ViewTransformer:
 
 class ObjectDetection:
     """
-    Class implements Yolo5 model to make inferences on a youtube video using OpenCV.
+    Class implements Yolo5 model to make inferences on a video using OpenCV.
     """
 
     def __init__(self):
         """
-        Initializes the class with youtube url and output file.
+        Initializes the class.
         """
         self.model = self.load_model()
         self.classes = self.model.names
